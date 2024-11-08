@@ -33,15 +33,15 @@ class Language(models.Model):
 
 class Book(models.Model):
     title = models.CharField(max_length=100)
-    author = models.ManyToManyField('Author', on_delete=models.SET_NULL, null=True)
+    author = models.ManyToManyField('Author')
     summary = models.TextField(max_length=1000, help_text='Enter a brief description of the book')
-    isbn = models.CharField(verbose_name="ISBN",
+    isbn = models.CharField(verbose_name="ISBN",max_length=17,
                             help_text='<a href="https://www.isbn-international.org/content/what-isbn">ISBN number</a>',
                             default=isbnlib.ISBN13,
                             unique=True,
                             editable=False)
 
-    genre = models.ManyToManyField('Genre', on_delete=models.SET_NULL, null=True, help_text='Select a genre')
+    genre = models.ManyToManyField('Genre', help_text='Select a genre')
     language = models.ForeignKey('Language', on_delete=models.SET_NULL, null=True, help_text='Select a language')
 
     def __str__(self):
