@@ -1,8 +1,10 @@
 import uuid
 import isbnlib
+import random
 from django.contrib.auth.models import User
 from django.db import models
 from django.urls import reverse
+
 
 class Genre(models.Model):
     name = models.CharField(max_length=100, help_text='Enter a book genre (e.g. Science Fiction, Poetry etc.)')
@@ -37,15 +39,25 @@ class Book(models.Model):
     summary = models.TextField(max_length=1000, help_text='Enter a brief description of the book')
     isbn = models.CharField(verbose_name="ISBN",max_length=17,
                             help_text='<a href="https://www.isbn-international.org/content/what-isbn">ISBN number</a>',
-                            default=isbnlib.ISBN13,
-                            unique=True,
-                            editable=False)
+                            unique=True, blank=True)
 
     genre = models.ManyToManyField('Genre', help_text='Select a genre')
     language = models.ForeignKey('Language', on_delete=models.SET_NULL, null=True, help_text='Select a language')
 
     def __str__(self):
         return self.title
+
+    def generate_isbn(self):
+        prefix = "978"
+        group = str(random.randint(1000, 9999))
+        publisher = str(random.randint(100000, 999999))
+        check_digit = str(random.randint(0, 9))
+        return f"{prefix}-{group}-{publisher}-{check_digit}"
+
+    def save(self, *args, **kwargs):
+        if not self.isbn:
+            self.isbn = self.generate_isbn()
+        super().save(*args, **kwargs)
 
     def get_absolute_url(self):
         return reverse('book-detail', kwargs={'pk': self.pk})
