@@ -71,7 +71,7 @@ class Book(models.Model):
         return reverse('book-detail', kwargs={'pk': self.pk})
 
 class BookInstance(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4)
     book = models.ForeignKey('Book', on_delete=models.SET_NULL, null=True)
     due_back = models.DateField(null=True, blank=True)
 
