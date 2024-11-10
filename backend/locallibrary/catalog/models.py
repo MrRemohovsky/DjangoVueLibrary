@@ -59,6 +59,14 @@ class Book(models.Model):
             self.isbn = self.generate_isbn()
         super().save(*args, **kwargs)
 
+    def display_author(self):
+        return ', '.join([f'{author.first_name} {author.last_name}' for author in self.author.all()])
+    display_author.short_description = 'Author'
+
+    def display_genre(self):
+        return ', '.join([genre.name for genre in self.genre.all()])
+    display_genre.short_description = 'Genre'
+
     def get_absolute_url(self):
         return reverse('book-detail', kwargs={'pk': self.pk})
 
