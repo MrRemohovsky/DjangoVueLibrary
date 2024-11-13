@@ -1,11 +1,26 @@
 <script setup>
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
+import axios from "axios";
+const numBooks = ref(0);
+const numInstances = ref(0);
+const numInstancesAvailable = ref(0);
+const numAuthors = ref(0);
+const numVisits = ref(0);
 
-const numBooks = ref(150);
-const numInstances = ref(200);
-const numInstancesAvailable = ref(120);
-const numAuthors = ref(45);
-const numVisits = ref(1);
+onMounted( () => {
+  axios.defaults.withCredentials = true;
+  axios.get('http://localhost:8000/catalog/api/library-stats/')
+  .then(response => {
+    const data = response.data;
+    numBooks.value = data.num_books;
+    numInstances.value = data.num_instances;
+    numInstancesAvailable.value = data.num_instances_available;
+    numAuthors.value = data.num_authors;
+    numVisits.value = data.num_visits;
+  })
+});
+
+
 </script>
 
 <template>
