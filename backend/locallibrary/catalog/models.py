@@ -70,6 +70,7 @@ class Book(models.Model):
     def get_absolute_url(self):
         return reverse('book-detail', kwargs={'pk': self.pk})
 
+
 class BookInstance(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4)
     book = models.ForeignKey('Book', on_delete=models.SET_NULL, null=True)

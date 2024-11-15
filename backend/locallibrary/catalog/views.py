@@ -2,7 +2,8 @@ from django.shortcuts import render
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from .models import Book, BookInstance, Author
-from .serializers import LibraryStatsSerializer
+from .serializers import LibraryStatsSerializer, BookSerializer, AuthorSerializer
+
 
 def test(request):
     return render(request, 'catalog/test.html')
@@ -29,3 +30,40 @@ class LibraryStatsView(APIView):
         }
         serializer = LibraryStatsSerializer(data)
         return Response(serializer.data)
+
+class BookListView(APIView):
+    def get(self, request, *args, **kwargs):
+        books = Book.objects.all()
+        serializer = BookSerializer(books, many=True)
+        return Response(serializer.data)
+
+class AuthorListView(APIView):
+    def get(self, request, *args, **kwargs):
+        authors = Author.objects.all()
+        serializer = AuthorSerializer(authors, many=True)
+        return Response(serializer.data)
+
+class BookDetailView(APIView):
+    def get(self, request, *args, **kwargs):
+        book = Book.objects.get(pk=kwargs['pk'])
+        serializer = BookSerializer(book)
+        return Response(serializer.data)
+
+class AuthorDetailView(APIView):
+    def get(self, request, *args, **kwargs):
+        author = Author.objects.get(pk=kwargs['pk'])
+        serializer = AuthorSerializer(author)
+        return Response(serializer.data)
+
+
+
+
+
+
+
+
+
+
+
+
+
