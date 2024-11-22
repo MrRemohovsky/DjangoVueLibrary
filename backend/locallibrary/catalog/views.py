@@ -2,7 +2,7 @@ from django.shortcuts import render
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from .models import Book, BookInstance, Author
-from .serializers import LibraryStatsSerializer, BookSerializer, AuthorSerializer
+from .serializers import LibraryStatsSerializer, BookSerializer, AuthorSerializer, AuthorDetailSerializer
 
 
 def test(request):
@@ -52,7 +52,8 @@ class BookDetailView(APIView):
 class AuthorDetailView(APIView):
     def get(self, request, *args, **kwargs):
         author = Author.objects.get(pk=kwargs['pk'])
-        serializer = AuthorSerializer(author)
+        serializer = AuthorDetailSerializer(author)
+        print(serializer.data)
         return Response(serializer.data)
 
 

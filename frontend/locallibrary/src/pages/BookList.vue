@@ -17,7 +17,7 @@ onMounted( () => {
   <div>
     <h1>Book List</h1>
       <li v-for="book in bookList" :key="book.id">
-        <a :href="book.absolute_url">{{ book.title }}</a>
+        <a :href="`/book-detail/${book.id}`">{{ book.title }}</a>
       </li>
   </div>
 </template>

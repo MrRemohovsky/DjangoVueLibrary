@@ -1,4 +1,6 @@
 from rest_framework import serializers
+from rest_framework.serializers import ModelSerializer
+
 from .models import Author, Book, Genre
 
 
@@ -10,13 +12,11 @@ class LibraryStatsSerializer(serializers.Serializer):
     num_visits = serializers.IntegerField()
 
 class AuthorSerializer(serializers.ModelSerializer):
-    absolute_url = serializers.SerializerMethodField()
 
     class Meta:
         model = Author
         fields = '__all__'
-    def get_absolute_url(self, obj):
-        return obj.get_absolute_url()
+
 
 class GenreSerializer(serializers.ModelSerializer):
     class Meta:
@@ -26,9 +26,15 @@ class GenreSerializer(serializers.ModelSerializer):
 class BookSerializer(serializers.ModelSerializer):
     author = AuthorSerializer(many=True)
     genre = GenreSerializer(many=True)
-    absolute_url = serializers.SerializerMethodField()
+    instance_count = serializers.IntegerField(source='book.instance_set.count', read_only=True)
+    language = serializers.StringRelatedField()
     class Meta:
         model = Book
         fields = '__all__'
-    def get_absolute_url(self, obj):
-        return obj.get_absolute_url()
+
+class AuthorDetailSerializer(serializers.ModelSerializer):
+    books = BookSerializer(source='book_set', many=True)
+
+    class Meta:
+        model = Author
+        fields = '__all__'
