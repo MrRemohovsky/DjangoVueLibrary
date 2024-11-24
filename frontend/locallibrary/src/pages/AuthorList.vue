@@ -16,11 +16,9 @@ onMounted( () => {
 <template>
   <div>
   <h1>Author List</h1>
-  <ul>
     <li v-for="author in authorList" :key="author.id">
       <a :href="`/author-detail/${author.id}`">{{ author.first_name }} {{ author.last_name }}</a>
     </li>
-  </ul>
   </div>
 </template>
 

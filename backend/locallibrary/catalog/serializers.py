@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from rest_framework.serializers import ModelSerializer
 
-from .models import Author, Book, Genre
+from .models import Author, Book, Genre, BookInstance
 
 
 class LibraryStatsSerializer(serializers.Serializer):
@@ -23,11 +23,16 @@ class GenreSerializer(serializers.ModelSerializer):
         model = Genre
         fields = '__all__'
 
+class BookInstanceSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = BookInstance
+        fields = '__all__'
+
 class BookSerializer(serializers.ModelSerializer):
     author = AuthorSerializer(many=True)
     genre = GenreSerializer(many=True)
-    instance_count = serializers.IntegerField(source='book.instance_set.count', read_only=True)
     language = serializers.StringRelatedField()
+    instance = BookInstanceSerializer(source='bookinstance_set', many=True, read_only=True)
     class Meta:
         model = Book
         fields = '__all__'

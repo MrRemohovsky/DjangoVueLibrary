@@ -11,6 +11,8 @@ onMounted( () => {
   axios.get(`http://localhost:8000/catalog/api/book-detail/${pk}/`)
   .then(response => {
     book.value = response.data
+    console.log(response)
+    console.log(book.value)
  })
 });
 </script>
@@ -30,7 +32,7 @@ onMounted( () => {
         </p>
       </div>
       <hr>
-      <p><strong>Краткое содержание:</strong> {{ book.summary }}</p>
+      <p><strong>Summary:</strong> {{ book.summary }}</p>
       <hr>
       <p><strong>ISBN:</strong> {{ book.isbn }}</p>
       <div v-for="genre in book.genre" :key="genre.id">
@@ -41,6 +43,18 @@ onMounted( () => {
       </div>
       <hr>
       <p><strong>Language:</strong> {{ book.language }}</p>
+    </div>
+    <hr>
+    <div>
+      <h4>Copies:</h4>
+      <div style="margin-left:20px;margin-top:20px" v-for="copy in book.instance" :key="copy.id">
+        <p>
+        {{ copy.status === 'a' ? 'Available' : copy.status === 'm' ? 'Maintenance' : copy.status === 'o' ? 'On loan' : 'Reserved' }}
+        </p>
+        <p v-if="copy.status === 'o'"><strong>Due to be returned:</strong> {{ copy.due_back }}</p>
+        <p class="text-muted"><strong>Id:</strong> {{ copy.id }}</p>
+        <hr>
+      </div>
     </div>
   </div>
 </template>
