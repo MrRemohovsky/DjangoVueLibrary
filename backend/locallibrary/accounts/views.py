@@ -1,3 +1,5 @@
+from asyncio import AbstractEventLoopPolicy
+
 from django.http import HttpResponse
 from django.shortcuts import render
 from rest_framework.permissions import IsAuthenticated
@@ -35,6 +37,25 @@ class LoanedBooksView(APIView):
         borrowed_books = BookInstance.objects.filter(borrower=user)
         serializer = LoanedBooksSerializer(borrowed_books, many=True)
         return Response(serializer.data)
+
+class UserInfoGroupView(APIView):
+    permission_classes = [IsAuthenticated]
+    def get(self, request):
+        user = request.user
+        groups = user.groups.values_list('name', flat=True)
+        return Response(
+            {
+                "user": user.username,
+                "groups":list(groups)
+            }
+        )
+class AllLoanedBooksView(APIView):
+    permission_classes = [IsAuthenticated]
+    def get(self, request):
+        borrowed_books = BookInstance.objects.filter(status__exact='o')
+        serializer = LoanedBooksSerializer(borrowed_books, many=True)
+        return Response(serializer.data)
+
 
 
 

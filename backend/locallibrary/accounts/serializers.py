@@ -22,9 +22,10 @@ class RegisterSerializer(ModelSerializer):
 class LoanedBooksSerializer(ModelSerializer):
     title = serializers.StringRelatedField(source='book.title')
     is_overdue = serializers.BooleanField(read_only=True)
+    borrower = serializers.StringRelatedField()
     class Meta:
         model = BookInstance
-        fields = ['title', 'book', 'due_back', 'is_overdue']
+        fields = ['title', 'book', 'due_back', 'is_overdue', 'borrower']
 
 
 
