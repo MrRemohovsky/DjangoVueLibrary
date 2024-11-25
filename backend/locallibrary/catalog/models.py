@@ -1,4 +1,6 @@
 import uuid
+from datetime import date
+
 import isbnlib
 import random
 from django.contrib.auth.models import User
@@ -87,6 +89,10 @@ class BookInstance(models.Model):
 
     class Meta:
         ordering = ['due_back']
+
+    @property
+    def is_overdue(self):
+        return self.due_back < date.today()
 
     def __str__(self):
         return '{} {}'.format(self.id, self.book.title)
