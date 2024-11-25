@@ -8,7 +8,7 @@
       </div>
       <div>
         <label for="password">Пароль</label>
-        <input v-model="password" id="password" type="password" required/>
+        <input v-model="password" id="password" type="password" required />
       </div>
       <button type="submit">Войти</button>
     </form>
@@ -17,8 +17,8 @@
 </template>
 
 <script>
-import {ref} from 'vue';
-import {useRouter} from 'vue-router';
+import { ref } from 'vue';
+import { useRouter } from 'vue-router';
 import axios from "axios";
 export default {
   name: 'LoginPage',
@@ -28,7 +28,6 @@ export default {
     const errorMessage = ref(null);
     const router = useRouter();
 
-    // Функция для авторизации пользователя
     const loginUser = async () => {
       try {
         const response = await axios.post('http://127.0.0.1:8000/api/accounts/login/', {
@@ -38,8 +37,7 @@ export default {
 
         localStorage.setItem('access_token', response.data.access);
         localStorage.setItem('refresh_token', response.data.refresh);
-
-        // Обновляем состояние isAuthenticated в localStorage
+        localStorage.setItem('username', username.value)
         window.dispatchEvent(new Event('storage'));
 
         alert('Авторизация успешна!');
