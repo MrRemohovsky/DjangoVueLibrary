@@ -7,6 +7,7 @@ import AuthorDetail from "@/pages/AuthorDetail.vue";
 import RegisterPage from "@/pages/RegisterPage.vue";
 import LoginPage from "@/pages/LoginPage.vue";
 import BorrowerPage from "@/pages/BorrowerPage.vue";
+import AllBorrowerPage from "@/pages/AllBorrowerPage.vue";
 
 const routes = [
   {
@@ -48,6 +49,11 @@ const routes = [
     path: '/borrower',
     name: 'BorrowerPage',
     component: BorrowerPage
+  },
+  {
+    path: '/all_borrower',
+    name: 'AllBorrowerPage',
+    component: AllBorrowerPage
   },
 ]
 
