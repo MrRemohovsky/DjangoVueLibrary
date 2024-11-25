@@ -4,6 +4,8 @@ import BookList from "@/pages/BookList.vue";
 import AuthorList from "@/pages/AuthorList.vue";
 import BookDetail from "@/pages/BookDetail.vue";
 import AuthorDetail from "@/pages/AuthorDetail.vue";
+import RegisterPage from "@/pages/RegisterPage.vue";
+import LoginPage from "@/pages/LoginPage.vue";
 
 const routes = [
   {
@@ -31,7 +33,16 @@ const routes = [
     name: 'AuthorDetail',
     component: AuthorDetail
   },
-
+  {
+    path: '/register',
+    name: 'RegisterPage',
+    component: RegisterPage
+  },
+  {
+    path: '/login',
+    name: 'LoginPage',
+    component: LoginPage
+  },
 ]
 
 const router = createRouter({
