@@ -1,3 +1,4 @@
+from django.core.cache import cache
 from django.shortcuts import render
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -10,6 +11,12 @@ def test(request):
 
 class LibraryStatsView(APIView):
     def get(self, request, *args, **kwargs):
+        cache_key = 'library_stats'
+        cache_data = cache.get(cache_key)
+
+        if cache_data:
+            return Response(cache_data)
+
         num_books = Book.objects.all().count()
         num_instances = BookInstance.objects.all().count()
         num_instances_available = BookInstance.objects.filter(status__exact='a').count()
@@ -29,18 +36,33 @@ class LibraryStatsView(APIView):
             'num_visits': request.session['num_visits']
         }
         serializer = LibraryStatsSerializer(data)
+        cache.set(cache_key, serializer.data, timeout=1)
         return Response(serializer.data)
 
 class BookListView(APIView):
     def get(self, request, *args, **kwargs):
+        cache_key = 'book_list'
+        cache_data = cache.get(cache_key)
+
+        if cache_data:
+            return Response(cache_data)
+
         books = Book.objects.all()
         serializer = BookSerializer(books, many=True)
+        cache.set(cache_key, serializer.data, timeout=300)
         return Response(serializer.data)
 
 class AuthorListView(APIView):
     def get(self, request, *args, **kwargs):
+        cache_key = 'author_list'
+        cache_data = cache.get(cache_key)
+
+        if cache_data:
+            return Response(cache_data)
+
         authors = Author.objects.all()
         serializer = AuthorSerializer(authors, many=True)
+        cache.set(cache_key, serializer.data, timeout=300)
         return Response(serializer.data)
 
 class BookDetailView(APIView):
