@@ -1,5 +1,6 @@
 from django.urls import path
-from .views import RegisterView, LogoutView, LoanedBooksView, UserInfoGroupView, AllLoanedBooksView
+from .views import RegisterView, LogoutView, LoanedBooksView, UserInfoGroupView, AllLoanedBooksView, \
+    ResetPasswordRequest, ResetPasswordConfirm
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
 urlpatterns = [
@@ -10,5 +11,7 @@ urlpatterns = [
     path('borrower/', LoanedBooksView.as_view(), name='borrower'),
     path('user_info/', UserInfoGroupView.as_view(), name='user_info'),
     path('all_borrower/', AllLoanedBooksView.as_view(), name='all_borrower'),
+    path('reset_password_request/', ResetPasswordRequest.as_view(), name='reset_password_request'),
+    path('reset_password_confirm/', ResetPasswordConfirm.as_view(), name='reset_password_confirm'),
 
 ]

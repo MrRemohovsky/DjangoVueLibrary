@@ -1,7 +1,5 @@
-from asyncio import AbstractEventLoopPolicy
-
-from django.http import HttpResponse
-from django.shortcuts import render
+from django.contrib.auth.models import User
+from rest_framework.exceptions import AuthenticationFailed
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -9,7 +7,8 @@ from rest_framework import status
 from rest_framework_simplejwt.tokens import RefreshToken
 from .serializers import RegisterSerializer, LoanedBooksSerializer
 from catalog.models import BookInstance
-
+from accounts.tasks import send_reset_mail
+from rest_framework_simplejwt.tokens import AccessToken
 
 class RegisterView(APIView):
     def post(self, request):
@@ -56,9 +55,50 @@ class AllLoanedBooksView(APIView):
         serializer = LoanedBooksSerializer(borrowed_books, many=True)
         return Response(serializer.data)
 
+class ResetPasswordRequest(APIView):
+    def post(self, request):
+        email = request.data.get('email')
+
+        if not email:
+            return Response({"detail": "Email is required."}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            user = User.objects.get(email=email)
+        except User.DoesNotExist:
+            return Response({"detail": "User not found."}, status=status.HTTP_404_NOT_FOUND)
+
+        refresh = RefreshToken.for_user(user)
+        token = str(refresh.access_token)
+
+        reset_link = f'http://localhost:8000/api/accounts/reset-password-confirm/{token}/'
+
+        send_reset_mail(
+            'Password Reset Request',
+            f'You can reset your password using this link: {reset_link}',
+            'from@example.com',
+            [email],
+        )
+
+        return Response({"detail": "Password reset email sent."}, status=status.HTTP_200_OK)
 
 
+class ResetPasswordConfirm(APIView):
+    def post(self, request, token):
+        try:
+            access_token = AccessToken(token)
+            user = User.objects.get(id=access_token['user_id'])
+        except Exception as e:
+            raise AuthenticationFailed("Invalid token or token expired.")
 
+        new_password = request.data.get('new_password')
+
+        if not new_password:
+            return Response({"detail": "New password is required."}, status=status.HTTP_400_BAD_REQUEST)
+
+        user.set_password(new_password)
+        user.save()
+
+        return Response({"detail": "Password has been successfully reset."}, status=status.HTTP_200_OK)
 
 
 
