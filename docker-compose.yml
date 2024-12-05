@@ -4,3 +4,17 @@ services:
     container_name: redis
     ports:
       - "6379:6379"
+  celery:
+    image: python:3.12
+    container_name: celery
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: celery -A locallibrary worker --loglevel=info
+    volumes:
+      - .:/app
+    environment:
+      - CELERY_BROKER_URL=redis://redis:6379/0
+      - CELERY_RESULT_BACKEND=redis://redis:6379/0
+    depends_on:
+      - redis
