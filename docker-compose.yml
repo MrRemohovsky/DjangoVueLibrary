@@ -4,6 +4,8 @@ services:
     container_name: redis
     ports:
       - "6379:6379"
+
+
   celery:
     image: python:3.12
     container_name: celery
@@ -18,3 +20,36 @@ services:
       - CELERY_RESULT_BACKEND=redis://redis:6379/0
     depends_on:
       - redis
+
+
+  backend:
+    image: python:3.12-slim
+    container_name: backend
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    volumes:
+      - ./backend:/app/backend/
+      - ./backend/locallibrary/db.sqlite3:/app/backend/locallibrary/db.sqlite3
+    environment:
+      - DJANGO_SETTINGS_MODULE=locallibrary.settings
+    ports:
+      - "8000:8000"
+    command: [ "python", "manage.py", "runserver", "0.0.0.0:8000" ]
+    depends_on:
+      - redis
+
+
+  frontend:
+    image: node:18-alpine
+    container_name: frontend
+    build:
+      context: .
+      dockerfile: frontend/Dockerfile
+    command: [ "npm", "run", "serve" ]
+    volumes:
+      - ./frontend/locallibrary:/app/frontend/locallibrary
+    ports:
+      - "8080:8080"
+    depends_on:
+      - backend
