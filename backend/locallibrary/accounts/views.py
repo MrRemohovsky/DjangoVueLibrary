@@ -70,7 +70,7 @@ class ResetPasswordRequest(APIView):
         refresh = RefreshToken.for_user(user)
         token = str(refresh.access_token)
 
-        reset_link = f'http://localhost:8000/api/accounts/reset-password-confirm/{token}/'
+        reset_link = f'http://localhost:8080/reset_password_confirm_page/{token}/'
 
         send_reset_mail(
             'Password Reset Request',

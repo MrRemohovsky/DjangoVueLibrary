@@ -12,6 +12,6 @@ urlpatterns = [
     path('user_info/', UserInfoGroupView.as_view(), name='user_info'),
     path('all_borrower/', AllLoanedBooksView.as_view(), name='all_borrower'),
     path('reset_password_request/', ResetPasswordRequest.as_view(), name='reset_password_request'),
-    path('reset_password_confirm/', ResetPasswordConfirm.as_view(), name='reset_password_confirm'),
+    path('reset_password_confirm/<str:token>/', ResetPasswordConfirm.as_view(), name='reset_password_confirm'),
 
 ]
