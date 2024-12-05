@@ -24,6 +24,9 @@
       <li v-if="!isAuthenticated">
         <router-link to="/login">Login</router-link>
       </li>
+      <li v-if="!isAuthenticated">
+        <router-link to="/reset_password_page">Reset Password</router-link>
+      </li>
     </ul>
   </div>
 </template>

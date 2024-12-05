@@ -8,6 +8,8 @@ import RegisterPage from "@/pages/RegisterPage.vue";
 import LoginPage from "@/pages/LoginPage.vue";
 import BorrowerPage from "@/pages/BorrowerPage.vue";
 import AllBorrowerPage from "@/pages/AllBorrowerPage.vue";
+import ResetPasswordPage from "@/pages/ResetPasswordPage.vue";
+import ResetPasswordConfirmPage from "@/pages/ResetPasswordConfirmPage.vue";
 
 const routes = [
   {
@@ -54,6 +56,17 @@ const routes = [
     path: '/all_borrower',
     name: 'AllBorrowerPage',
     component: AllBorrowerPage
+  },
+  {
+    path: '/reset_password_page',
+    name: 'ResetPasswordPage',
+    component: ResetPasswordPage
+  },
+  {
+    path: '/reset_password_confirm_page/:token',
+    name: 'ResetPasswordConfirmPage',
+    component: ResetPasswordConfirmPage,
+    props: true,
   },
 ]
 
