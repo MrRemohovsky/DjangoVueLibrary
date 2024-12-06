@@ -49,6 +49,7 @@ services:
     command: [ "npm", "run", "serve" ]
     volumes:
       - ./frontend/locallibrary:/app/frontend/locallibrary
+      - /app/frontend/locallibrary/node_modules
     ports:
       - "8080:8080"
     depends_on:
