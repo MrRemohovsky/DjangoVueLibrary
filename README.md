@@ -29,3 +29,5 @@ password: locallibrary
 ПОЛЬЗОВАТЕЛЬ: testuser1
 password: locallibrary1
 email: locallibrarytestuser1@mail.ru
+
+Сброс пароля по почте: email приходит в консоль
